@@ -1,0 +1,3 @@
+display_name: Shopee Global Listing
+short_description: Prepare and create Shopee Global Products
+default_prompt: Use this skill to turn an authorized Pinduoduo product link into a validated Shopee Global Product, create it idempotently, verify variants, and stop before site-shop publishing.
