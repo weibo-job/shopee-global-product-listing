@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+.env.*
+api_work/
+上架整理_*/
+商品*/
+*.success.json
+创建成功_*.json
