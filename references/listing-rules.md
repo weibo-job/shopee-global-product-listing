@@ -7,7 +7,7 @@ Use these user-specific listing rules unless the current Shopee category/API res
 - Use at most 9 square main images; this is a ceiling, not a requirement to invent images.
 - If the original main-image set has fewer than 9 suitable square images, fill only the remaining slots with detail images whose supported information is not already represented by the selected main images and that can stand alone. Build each promoted image as a square from that single source image by safe resizing/re-layout or image generation; do not cut the product body, change its proportions, combine multiple detail images, or add unsupported content.
 - Main image dimensions must be greater than 700 px.
-- If no square image exists, vertical images are acceptable only when the aspect ratio is not taller than 1:2.
+- If no square image exists, vertical images are acceptable when the aspect ratio is no taller than 1:2 (`width/height >= 0.5`).
 - Main images should clearly show product appearance, selling points, accessories, and key use information.
 - If a product video is supplied, include it.
 
@@ -42,8 +42,8 @@ Use these user-specific listing rules unless the current Shopee category/API res
 
 - At most 12 detail images; this is a ceiling, not a target.
 - Width must be at least 700 px.
-- Width/height must be strictly greater than 0.5 (exactly 1:2 fails).
-- Every selected detail image must be independently complete and understandable. Never stitch separate source panels, split one long panel into dependent upper/lower images, or make adjacent images complete each other.
+- Width/height must be greater than or equal to 0.5.
+- Every selected detail image must be independently complete and understandable: its title/copy, product or feature subject, and scene must be complete without another card. A continuous waterfall/flowing background may cross a crop boundary, but do not cut through a required subject or content module. Never stitch separate source panels, split one long panel into dependent upper/lower images, or make adjacent images complete each other. The written feature/specification must match the product/function subject shown on the same card.
 - First check dimensions and whether the product or information is cut through the middle. If all selected detail images are complete, translate them in place. If any selected detail image cuts through the product/body or makes the information incomplete, enter detail-card regeneration mode: use the original detail images only and generate a coherent English set of standalone cards, targeting 12 but never exceeding 12. If the source cannot support 12 independent cards, produce fewer rather than inventing information. If a square output is needed, use safe padding/re-layout or generation rather than cutting the product body. Keep the product proportions unchanged, do not stretch or distort it, and keep all essential product information inside each card.
 - First detail images should clearly show product body, selling points, and key information.
 - Exclude:
