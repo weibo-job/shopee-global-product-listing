@@ -14,7 +14,7 @@ This skill prepares and verifies Shopee Global Product drafts from an authorized
 
 ## 关键规则
 
-1. 详情图源素材达到 12 张时，英文版必须正好上传 12 张，不能因为直链失效、尺寸不合规或比例不合规而直接减少；应先恢复素材，再通过安全重排或 `imagegen` 生成忠实替代图。
+1. 详情图必须先完成渲染页资产盘点、排除记录和 source-relative 顺序审查；清理后至少保留 6 张完整详情卡，最多选择 12 张，不能用推荐图、无关图或任意切片补数。
 2. 同一商品包内所有英文详情图必须使用统一像素宽度，且每张都必须是独立完整的详情卡，不能把一张长图切成互相依赖的上下片段。
 3. 源页能确认库存时使用源库存；源页无法确认时才使用默认库存 100，并明确记录 `stock_source=default_100`。
 4. 价格按源 SKU 价格乘以 2，除非用户明确指定其他价格。
@@ -39,7 +39,7 @@ cp -R shopee-global-product-listing "${CODEX_HOME:-$HOME/.codex}/skills/"
 使用 shopee-global-product-listing，把这个拼多多授权商品整理成英文 Shopee Global Product：<商品链接>
 ```
 
-也可以提供已经下载的商品素材目录。技能会先归档和检查素材，再生成同级的 `上架整理_<商品>_英文版` 包。
+也可以提供已经下载的商品素材目录。技能会先归档和检查素材，再在 `/Users/fudasu/Desktop/ai自动化上架/<product-folder>/` 下分开保存 `原图/` 与 `英文版/`。
 
 如果用户没有提供 SKU 库存，技能会使用 100 作为默认库存并在结果中标注；如果源页有库存，则不会用默认值覆盖源库存。
 
@@ -50,7 +50,7 @@ cp -R shopee-global-product-listing "${CODEX_HOME:-$HOME/.codex}/skills/"
 - 已配置的 Shopee helper SSH 身份
 - `imagegen` 能力，用于修复不合规或被切断的详情卡
 
-`enqueue_shopee_job.py` 默认只接受位于 `~/Documents/Codex` 下的商品包。若你的工作区不同，可设置：
+`enqueue_shopee_job.py` 默认只接受配置允许的商品包根目录。若你的工作区不同，可设置：
 
 ```bash
 export SHOPEE_ALLOWED_ROOT="/path/to/your/Codex"
