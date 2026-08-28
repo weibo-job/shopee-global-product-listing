@@ -1,0 +1,8 @@
+{
+  "helper_base": "https://your-helper.example.com",
+  "partner_id": "YOUR_PARTNER_ID",
+  "partner_key": "STORE_THIS_OUTSIDE_PUBLIC_REPOSITORY",
+  "shop_id": "YOUR_SHOP_ID",
+  "merchant_id": "YOUR_MERCHANT_ID",
+  "host": "https://partner.shopeemobile.com"
+}

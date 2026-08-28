@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import json
 import pathlib
+import os
 import secrets
 import shutil
 import sys
@@ -14,7 +15,7 @@ import sys
 
 DEFAULT_QUEUE = pathlib.Path("/private/tmp/ShopeeJobRunner/queue")
 DEFAULT_STAGING = pathlib.Path("/private/tmp/ShopeeJobRunner/jobs")
-ALLOWED_ROOT = pathlib.Path("/Users/fudasu/Documents/Codex")
+ALLOWED_ROOT = pathlib.Path(os.environ.get("SHOPEE_ALLOWED_ROOT") or os.getcwd()).expanduser().resolve()
 
 
 def enqueue(
@@ -72,7 +73,7 @@ def main() -> int:
     try:
         product_dir.relative_to(ALLOWED_ROOT)
     except ValueError:
-        raise SystemExit("product-dir must be under /Users/fudasu/Documents/Codex")
+        raise SystemExit(f"product-dir must be under {ALLOWED_ROOT}")
     runner = (args.runner or product_dir / "run_stage1_prepare.sh").expanduser().resolve()
     try:
         ready = enqueue(str(args.goods_id), product_dir, runner, args.queue, args.staging)

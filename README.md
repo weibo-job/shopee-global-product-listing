@@ -23,7 +23,7 @@ This skill prepares and verifies Shopee Global Product drafts from an authorized
 
 ## 安装
 
-将此目录复制到 Codex 技能目录：
+将此目录复制到 Codex 技能目录。该仓库已经内置素材打包、审计、授权、本地直连和 VPS helper 脚本，不需要另外安装 `shopee-listing-packager`：
 
 ```bash
 cp -R shopee-global-product-listing "${CODEX_HOME:-$HOME/.codex}/skills/"
@@ -39,16 +39,35 @@ cp -R shopee-global-product-listing "${CODEX_HOME:-$HOME/.codex}/skills/"
 使用 shopee-global-product-listing，把这个拼多多授权商品整理成英文 Shopee Global Product：<商品链接>
 ```
 
-也可以提供已经下载的商品素材目录。技能会先归档和检查素材，再在 `/Users/fudasu/Desktop/ai自动化上架/<product-folder>/` 下分开保存 `原图/` 与 `英文版/`。
+也可以提供已经下载的商品素材目录。技能会先归档和检查素材，再在 `${SHOPEE_LISTING_OUTPUT_DIR:-<cwd>/shopee-listing}/<product-folder>` 下分开保存 `原图/` 与 `英文版/`。
 
 如果用户没有提供 SKU 库存，技能会使用 100 作为默认库存并在结果中标注；如果源页有库存，则不会用默认值覆盖源库存。
 
 ## 环境与依赖
 
 - Python 3
-- 可访问的 Shopee helper（默认由本地 LaunchAgent 通过 SSH 调用 VPS 上的 `127.0.0.1:3000`）
-- 已配置的 Shopee helper SSH 身份
-- `imagegen` 能力，用于修复不合规或被切断的详情卡
+- `agent-browser` 能力，用于授权商品页的完整渲染和懒加载扫描
+- Shopee API 凭证和店铺/商户 OAuth 授权
+- 默认使用用户自己配置的 VPS helper；也可以配置本地 Shopee API 直连
+- 只有原图裁剪无法满足要求时，才需要带原图参考输入的 `imagegen` 能力
+
+公共仓库不包含个人 VPS、商户、店铺、Token 或密钥。复制 `config.example.json` 到私有配置位置，或使用环境变量：
+
+```bash
+export SHOPEE_HELPER_BASE="https://your-helper.example.com"
+export SHOPEE_PARTNER_ID="..."
+export SHOPEE_PARTNER_KEY="..."
+export SHOPEE_SHOP_ID="..."
+export SHOPEE_MERCHANT_ID="..."
+```
+
+默认通道是用户配置的 VPS helper；未配置或 preflight 失败时必须停止报告，不得自动使用其他人的服务器。
+
+安装后先运行：
+
+```bash
+python3 scripts/preflight.py
+```
 
 `enqueue_shopee_job.py` 默认只接受配置允许的商品包根目录。若你的工作区不同，可设置：
 
@@ -60,6 +79,8 @@ export SHOPEE_ALLOWED_ROOT="/path/to/your/Codex"
 
 ```bash
 python3 scripts/validate_listing_draft.py path/to/global_item_request.json
+python3 scripts/scan_images.py path/to/package/原图/02_详情图 \
+  --manifest-out path/to/package/原图/_evidence/manifest_详情图.json
 python3 scripts/enqueue_shopee_job.py \
   --goods-id '<goods_id>' \
   --product-dir '/path/to/staged-product-package'
@@ -74,6 +95,11 @@ SKILL.md                         # Codex 技能入口
 agents/openai.yaml               # 技能在 Codex 中的显示信息
 references/listing-rules.md      # 商品与图片规则
 references/live-api-runbook.md  # helper/API 执行与故障处理
+references/localization-audit-schema.md
+scripts/scan_images.py           # 尺寸、比例、MD5 和顺序清单
+scripts/make_package.py          # 原图/英文版目录初始化
+scripts/long_canvas.py           # 分析用 long canvas 构建/切分
+scripts/preflight.py             # 安装后环境/API 配置检查
 scripts/validate_listing_draft.py
 scripts/enqueue_shopee_job.py
 ```
